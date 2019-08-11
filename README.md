@@ -4,3 +4,16 @@
 [![Lifecycle Status](https://img.shields.io/badge/lifecycle-experimental-red.svg)](https://www.tidyverse.org/lifecycle/)
 
 # Welcome to rsar
+
+Installation with devtools:
+```{r}
+devtools::install_github("frycast/rsar")
+library(rsar)
+```
+
+Start by importing SAR data as a raster brick.
+The file path specified below is to a sample dataset in the package directory.
+```{r}
+filepath <- system.file("extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
+sample <- raster::brick(filepath)
+```
