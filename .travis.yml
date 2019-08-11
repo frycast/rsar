@@ -23,10 +23,10 @@ matrix:
     - r: devel
       os: linux
       dist: trusty
-    - r: release
-      os: osx
-      before_install:
-      - brew update
+#    - r: release
+#      os: osx
+#      before_install:
+#      - brew update
 
 r_github_packages:
       - rstudio/reticulate
