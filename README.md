@@ -11,9 +11,20 @@ devtools::install_github("frycast/rsar")
 library(rsar)
 ```
 
-Start by importing SAR data as a raster brick.
+The load_SAR_matrix will import a raster brick from a `tif` file and
+convert the raster brick to a `SAR_matrix`. Each column of a `SAR_matrix` 
+corresponds to a band in the original raster brick, and each row 
+corresponds to a pixel. So if the raster brick has dimensions `A x B x C`
+then the `SAR_matrix` has dimensions `A*B x C`.
 The file path specified below is to a sample dataset in the package directory.
 ```{r}
-filepath <- system.file("extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
-sample <- raster::brick(filepath)
+filename <- system.file("extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
+sample <- load_SAR_matrix(filename)
 ```
+
+The sample raster brick consists of a 43x50 raster image with 29 bands.
+```{r}
+dim(sample)
+```
+
+
