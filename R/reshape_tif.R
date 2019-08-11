@@ -1,7 +1,7 @@
 #' reshaper
 #'
-#' @param br_a
-#' @param m
+#' @param br_a A raster brick
+#' @param m A matrix
 #'
 #' @return
 #' @export
@@ -9,10 +9,10 @@
 #' @examples
 reshaper <- function(br_a, m) {
   if (missing(m)) {
-    return(reticulate::array_reshape(br_a, dim = c(dim(br_a)[1]*dim(br_a)[2], dim(br_a)[3])))
+    return(reticulate::array_reshape(br_a, dim = c(dim(br_a)[1L]*dim(br_a)[2L], dim(br_a)[3L])))
 
   } else {
-    dim <- c(dim(br_a)[1], dim(br_a)[2], dim(br_a)[3])
+    dim <- c(dim(br_a)[1L], dim(br_a)[2L], dim(br_a)[3L])
     br_a2 <- reticulate::array_reshape(m, dim = dim)
     br_b <- raster::brick(br_a2)
     return(br_b)
@@ -21,9 +21,9 @@ reshaper <- function(br_a, m) {
 
 #' give_attrs
 #'
-#' @param br_b
-#' @param br
-#' @param incl_names
+#' @param br_b A raster brick
+#' @param br A raster brick
+#' @param incl_names Logical
 #'
 #' @return
 #' @export
@@ -38,16 +38,16 @@ give_attrs <- function(br_b, br, incl_names = TRUE) {
 
 #' reshapekDL
 #'
-#' @param br_a
-#' @param m
-#' @param k
+#' @param br_a A raster brick
+#' @param m A matrix
+#' @param k An integer
 #'
 #' @return
 #' @export
 #'
 #' @examples
-reshapekDL <- function(br_a, m, k = 2) {
-  dim <- c(dim(br_a)[1], dim(br_a)[2], k)
+reshapekDL <- function(br_a, m, k = 2L) {
+  dim <- c(dim(br_a)[1L], dim(br_a)[2L], k)
   br_a2 <- reticulate::array_reshape(m, dim = dim)
   br_b <- raster::brick(br_a2)
   return(br_b)
