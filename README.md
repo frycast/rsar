@@ -6,6 +6,7 @@
 [![Codecov test coverage](https://codecov.io/gh/frycast/rsar/branch/master/graph/badge.svg)](https://codecov.io/gh/frycast/rsar?branch=master)
 <!-- badges: end -->
 
+
 # Welcome to rsar
 
 Installation with devtools:
