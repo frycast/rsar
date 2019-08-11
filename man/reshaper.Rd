@@ -7,7 +7,9 @@
 reshaper(br_a, m)
 }
 \arguments{
-\item{m}{}
+\item{br_a}{A raster brick}
+
+\item{m}{A matrix}
 }
 \description{
 reshaper

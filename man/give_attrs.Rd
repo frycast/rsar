@@ -7,7 +7,11 @@
 give_attrs(br_b, br, incl_names = TRUE)
 }
 \arguments{
-\item{incl_names}{}
+\item{br_b}{A raster brick}
+
+\item{br}{A raster brick}
+
+\item{incl_names}{Logical}
 }
 \description{
 give_attrs

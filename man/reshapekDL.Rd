@@ -4,10 +4,14 @@
 \alias{reshapekDL}
 \title{reshapekDL}
 \usage{
-reshapekDL(br_a, m, k = 2)
+reshapekDL(br_a, m, k = 2L)
 }
 \arguments{
-\item{k}{}
+\item{br_a}{A raster brick}
+
+\item{m}{A matrix}
+
+\item{k}{An integer}
 }
 \description{
 reshapekDL
