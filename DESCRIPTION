@@ -16,7 +16,8 @@ Depends: R (>= 3.5.0)
 Imports:
     raster (>= 2.9-23),
     reticulate (>= 1.13),
-    assertthat (>= 0.2.1)
+    assertthat (>= 0.2.1),
+    rgdal (>= 1.4-4)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
