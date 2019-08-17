@@ -2,5 +2,6 @@
 
 export(SAR_matrix)
 export(brick_to_matrix)
+export(is_SAR_matrix)
 export(load_SAR_matrix)
 export(matrix_to_brick)
