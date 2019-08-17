@@ -13,3 +13,4 @@
 ^CRAN-RELEASE$
 ^LICENSE$
 ^codecov\.yml$
+^exploration$
