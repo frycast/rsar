@@ -109,11 +109,11 @@ brick_to_matrix <- function(b) {
   m <- reticulate::array_reshape(raster::as.array(b), dim = d)
 
   brick_attr <- attributes(b)[c("extent", "crs")]
-  m <- structure(m, class = c("SAR_matrix", class(m)),
-                 brick_extent = brick_attr$extent,
-                 brick_crs = brick_attr$crs,
-                 brick_dim = b_dim,
-                 brick_names = names(b))
+  m <- SAR_matrix(m, extent = brick_attr$extent,
+                  brick_crs = brick_attr$crs,
+                  brick_nrow = b_dim[1L],
+                  brick_ncol = b_dim[2L],
+                  brick_names = names(b))
   return(m)
 }
 
@@ -142,5 +142,9 @@ brick_to_matrix <- function(b) {
 matrix_to_brick <- function(m) {
   dim <- attr(m, "brick_dim")
   b <- raster::brick(reticulate::array_reshape(m, dim = dim))
+
   return(b)
 }
+
+
+
