@@ -1,3 +1,7 @@
+
+##########################
+### WRITE TESTS (X)
+##########################
 #' load_SAR_matrix
 #'
 #' Given a file path to a SAR raster image
@@ -27,6 +31,9 @@ load_SAR_matrix <- function(filename) {
 }
 
 
+##########################
+### WRITE TESTS (X)
+##########################
 #' brick_to_matrix
 #'
 #' Convert a raster \code{\link[raster]{brick}} of
@@ -63,6 +70,9 @@ brick_to_matrix <- function(b) {
 }
 
 
+##########################
+### WRITE TESTS (X)
+##########################
 #' matrix_to_brick
 #'
 #' Convert an \code{\link[rsar]{SAR_matrix}} object \code{m},
