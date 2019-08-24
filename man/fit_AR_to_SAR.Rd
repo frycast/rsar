@@ -8,6 +8,10 @@ fit_AR_to_SAR(m, order = choose_order(m))
 }
 \arguments{
 \item{m}{A matrix.}
+
+\item{order}{An integer giving the order of the AR
+model. The default uses \code{\link[rsar]{choose_order}}
+to choose automatically.}
 }
 \value{
 A matrix of AR coefficients where each row corresponds to
@@ -15,7 +19,7 @@ one row of \code{m}.
 }
 \description{
 Fit an AR model with the chosen \code{order}
-to each row of \code{m} using \code{\link[base]{ar}}
+to each row of \code{m} using \code{\link[stats]{ar}}
 (so each row of \code{m} is treated as a single
 time series). The results are returned in a matrix whose
 columns are the resulting AR coefficients.
