@@ -1,34 +1,39 @@
-filename_cc <- system.file(
-  "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
-filename_vh <- system.file(
+# attributes(x)$extent@ymin
+
+filename <- system.file(
   "extdata", "MG_VH_sub_norm_testclip.tif", package="rsar")
 
-test_that("data loads and reshapes", {
-  cc_m1 <- load_SAR_matrix(filename_cc)
-  cc_b1 <- raster::brick(filename_cc)
-  cc_m2 <- brick_to_matrix(cc_b1)
-  cc_b2 <- matrix_to_brick(cc_m1)
 
-  vh_m1 <- load_SAR_matrix(filename_vh)
-  vh_b1 <- raster::brick(filename_vh)
+
+testthat::test_that('Tif data loads correctly', {
+
+  x <- load_SAR_matrix(filename)
+  testthat::expect_equal(class(x), c('SAR_matrix', 'matrix'))
+  testthat::expect_equal(typeof(x), 'double')
+  testthat::expect_equal(dim(x), c('2150', '30'))
+  testthat::expect_equal(attributes(x)$brick_dim, c(43, 50, 30))
+})
+
+
+test_that("data loads and reshapes", {
+
+  vh_m1 <- load_SAR_matrix(filename)
+  vh_b1 <- raster::brick(filename)
   vh_m2 <- brick_to_matrix(vh_b1)
   vh_b2 <- matrix_to_brick(vh_m1)
 
   m1 <- SAR_matrix()
 
-  expect_equal(dim(cc_m1), dim(cc_m2))
-  expect_equal(dim(cc_b1), dim(cc_b2))
   expect_equal(dim(vh_m1), dim(vh_m2))
   expect_equal(dim(vh_b1), dim(vh_b2))
+  expect_equal(summary(vh_m1)[1], summary(vh_m2)[1])
+  expect_equal(summary(vh_b1)[1], summary(vh_b2)[1])
 
-  testthat::expect_gt(dim(cc_m2)[1], 1)
-  testthat::expect_gt(dim(cc_m2)[2], 1)
+  expect_equal(attr(vh_m1,"brick_dim"), c(43, 50, 30))
+
   testthat::expect_gt(dim(vh_m2)[1], 1)
   testthat::expect_gt(dim(vh_m2)[2], 1)
 
-  testthat::expect_gt(dim(cc_b2)[1], 1)
-  testthat::expect_gt(dim(cc_b2)[2], 1)
-  testthat::expect_gt(dim(cc_b2)[3], 1)
   testthat::expect_gt(dim(vh_b2)[1], 1)
   testthat::expect_gt(dim(vh_b2)[2], 1)
   testthat::expect_gt(dim(vh_b2)[3], 1)
