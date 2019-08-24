@@ -4,7 +4,6 @@ filename <- system.file(
   "extdata", "MG_VH_sub_norm_testclip.tif", package="rsar")
 
 
-
 testthat::test_that('Tif data loads correctly', {
 
   x <- load_SAR_matrix(filename)

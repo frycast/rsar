@@ -27,14 +27,17 @@
 #'
 #'
 choose_order <- function(m, sample_size = 1e3L) {
-  s <- sample(1:nrow(m), sample_size)
-  ms <- m[s,]
+  if ( nrow( m ) > sample_size ) {
+    ms <- m[sample(1:nrow(m), sample_size),]
+  } else {
+    ms <- m
+  }
   max_or <- 0
-  for (i in 1:nrow(ms)) {
-    or <- ar(ms[i,])$order
+  for (i in 1:nrow( ms )) {
+    or <- ar( ms[i,] )$order
     if ( or > max_or ) {max_or <- or}
   }
-  return(as.integer(max_or))
+  return( as.integer( max_or ) )
 }
 
 
