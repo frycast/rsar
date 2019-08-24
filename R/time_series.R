@@ -18,6 +18,8 @@
 #' @return
 #' An integer.
 #'
+#' @importFrom stats ar
+#'
 #' @export
 #'
 #' @examples
@@ -47,16 +49,21 @@ choose_order <- function(m, sample_size = 1e3L) {
 #' fit_AR_to_SAR
 #'
 #' Fit an AR model with the chosen \code{order}
-#' to each row of \code{m} using \code{\link[base]{ar}}
+#' to each row of \code{m} using \code{\link[stats]{ar}}
 #' (so each row of \code{m} is treated as a single
 #' time series). The results are returned in a matrix whose
 #' columns are the resulting AR coefficients.
 #'
 #' @param m A matrix.
+#' @param order An integer giving the order of the AR
+#' model. The default uses \code{\link[rsar]{choose_order}}
+#' to choose automatically.
 #'
 #' @return
 #' A matrix of AR coefficients where each row corresponds to
 #' one row of \code{m}.
+#'
+#' @importFrom stats ar
 #'
 #' @export
 #'
@@ -66,7 +73,7 @@ choose_order <- function(m, sample_size = 1e3L) {
 #' ar_m <- fit_AR_to_SAR(m)
 #'
 fit_AR_to_SAR  <- function(m, order = choose_order(m)) {
-  ar_m <- t(apply(m, MARGIN = 1, function(x){ar(x, order = order, aic = F)$ar}))
+  ar_m <- t(apply(m, MARGIN = 1, function(x){ ar(x, order.max = order, aic = F)$ar }))
   colnames(ar_m) <- paste0("p", 1:order)
   return(ar_m)
 }
