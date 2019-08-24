@@ -12,6 +12,7 @@ testthat::test_that('Tif data loads correctly', {
   testthat::expect_equal(typeof(x), 'double')
   testthat::expect_equal(dim(x), c('2150', '30'))
   testthat::expect_equal(attributes(x)$brick_dim, c(43, 50, 30))
+  testthat::expect_equal(attributes(x)$crs@projargs, "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
 })
 
 
