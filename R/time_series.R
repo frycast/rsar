@@ -1,3 +1,7 @@
+
+##########################
+### WRITE TESTS (X)
+##########################
 #' choose_order
 #'
 #' Take a random sample (of size \code{sample_size})
@@ -34,6 +38,9 @@ choose_order <- function(m, sample_size = 1e3L) {
 }
 
 
+##########################
+### WRITE TESTS (X)
+##########################
 #' fit_AR_to_SAR
 #'
 #' Fit an AR model with the chosen \code{order}
