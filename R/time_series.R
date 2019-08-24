@@ -17,7 +17,7 @@
 #'
 #' @return
 #' An integer.
-#'
+#'B
 #' @export
 #'
 #' @examples
