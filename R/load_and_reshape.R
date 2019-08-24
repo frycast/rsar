@@ -100,9 +100,9 @@ matrix_to_brick <- function(m) {
   dim <- attr(m, "brick_dim")
   b <- raster::brick(reticulate::array_reshape(m, dim = dim),
                      crs = attr(m, "crs"))
-
+  matrix_to_brick
   raster::extent(b) <- attr(m, "extent")
-  names(b) <- attr(m, "names")
+  names(b) <- attr(m, "brick_names")
   return(b)
 }
 
