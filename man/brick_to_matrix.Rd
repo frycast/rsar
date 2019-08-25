@@ -4,7 +4,7 @@
 \alias{brick_to_matrix}
 \title{brick_to_matrix}
 \usage{
-brick_to_matrix(b, drop_na = TRUE)
+brick_to_matrix(b, drop_na = TRUE, na_layer = 1L)
 }
 \arguments{
 \item{b}{A raster \code{\link[raster]{brick}}.}
@@ -16,6 +16,10 @@ reconstructed later with \code{\link[rsar]{matrix_to_brick}}.
 Note, to save time, only one layer is checked for \code{NA}
 pixels, i.e., it is assumed that an \code{NA} pixel is
 \code{NA} across all layers.}
+
+\item{na_layer}{An integer specifying the index of the
+layer to check for \code{NA} values if \code{drop_na}
+is \code{TRUE}.}
 }
 \value{
 An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation

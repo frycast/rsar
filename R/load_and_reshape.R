@@ -21,6 +21,9 @@
 #' Note, to save time, only one layer is checked for \code{NA}
 #' pixels, i.e., it is assumed that an \code{NA} pixel is
 #' \code{NA} across all layers.
+#' @param na_layer An integer specifying the index of the
+#' layer to check for \code{NA} values if \code{drop_na}
+#' is \code{TRUE}.
 #'
 #' @return
 #' An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
@@ -33,8 +36,9 @@
 #'   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 #' load_SAR_matrix(filename)
 #'
-load_SAR_matrix <- function(filename, drop_na = TRUE) {
-  return(brick_to_matrix( b = raster::brick( filename ), drop_na = drop_na ))
+load_SAR_matrix <- function(filename, drop_na = TRUE, na_layer = 1L ) {
+  return(brick_to_matrix(
+    b = raster::brick( filename ), drop_na = drop_na, na_layer = na_layer ))
 }
 
 
@@ -57,6 +61,9 @@ load_SAR_matrix <- function(filename, drop_na = TRUE) {
 #' Note, to save time, only one layer is checked for \code{NA}
 #' pixels, i.e., it is assumed that an \code{NA} pixel is
 #' \code{NA} across all layers.
+#' @param na_layer An integer specifying the index of the
+#' layer to check for \code{NA} values if \code{drop_na}
+#' is \code{TRUE}.
 #'
 #' @return
 #' An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
@@ -70,14 +77,14 @@ load_SAR_matrix <- function(filename, drop_na = TRUE) {
 #' b <- raster::brick(filename)
 #' m <- brick_to_matrix(b)
 #'
-brick_to_matrix <- function(b, drop_na = TRUE) {
+brick_to_matrix <- function(b, drop_na = TRUE, na_layer = 1L ) {
   b_dim <- dim( b )
   d <- c( b_dim[ 1L ] * b_dim[ 2L ], b_dim[ 3L ] )
   m <- reticulate::array_reshape( raster::as.array(b), dim = d )
 
   na_indices <- integer(0)
   if ( drop_na ) {
-    na_indices <- which( is.na( m[,1] ) )
+    na_indices <- which( is.na( m[ , na_layer ] ) )
     if ( length( na_indices ) > 0 ) m <- m[ -na_indices, ]
   }
 
