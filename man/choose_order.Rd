@@ -14,6 +14,7 @@ choose_order(m, sample_size = 1000L)
 }
 \value{
 An integer.
+B
 }
 \description{
 Take a random sample (of size \code{sample_size})

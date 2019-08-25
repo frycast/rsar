@@ -23,10 +23,15 @@
 #' \code{brick_nrow * brick_nrow} must equal \code{nrow(m)}.
 #' @param brick_names A vector of length \code{ncol(m)}
 #' labelling each band in the raster \code{\link[raster]{brick}}.
+#' @param brick_na_indices Integer vector giving row indices for locations
+#' where \code{NA} pixels exist in the
+#' corresponding raster \code{\link[raster]{brick}}.
 #' @param attr_src Either another \code{SAR_matrix} or a
 #' raster \code{\link[raster]{brick}}. If this argument is not
 #' missing then all other arguments to this function will be sourced
-#' from \code{attr_src}, except for the argument \code{brick_names}.
+#' from \code{attr_src} (except for the argument \code{brick_names},
+#' since \code{attr_src} is understood to possible have fewer
+#' columns than \code{m}).
 #'
 #' @return
 #' A \code{SAR_matrix} object; a specialisation
@@ -39,30 +44,34 @@
 #' SAR_matrix()
 #'
 SAR_matrix <- function(
-  m = matrix(0, 4, 3), extent = raster::extent(raster::raster()),
+  m = matrix(0, 4, 3), extent = raster::extent( raster::raster() ),
   crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  brick_nrow = 2, brick_ncol = nrow(m) / brick_nrow,
-  brick_names = paste0( "layer.", 1:ncol(m) ), attr_src) {
+  brick_nrow = 2, brick_ncol = nrow( m ) / brick_nrow,
+  brick_names = paste0( "layer.", 1:ncol( m ) ),
+  brick_na_indices = integer(0), attr_src) {
 
-  assertthat::assert_that( brick_nrow * brick_ncol == nrow(m) )
-  assertthat::assert_that( length(brick_nrow) == 1 )
-  assertthat::assert_that( length(brick_ncol) == 1 )
-  assertthat::assert_that( length(brick_names) == ncol(m) )
+  assertthat::assert_that(
+    brick_nrow * brick_ncol == nrow( m ) + length( brick_na_indices ) )
+  assertthat::assert_that( length( brick_nrow ) == 1 )
+  assertthat::assert_that( length( brick_ncol ) == 1 )
+  assertthat::assert_that( length( brick_names ) == ncol( m ) )
 
   if ( missing(attr_src) ) {
     m <- structure(
-      m, class = c("SAR_matrix", class(m)),
+      m, class = c( "SAR_matrix", class( m ) ),
       extent = extent,
       crs = crs,
-      brick_dim = c( brick_nrow, brick_ncol, ncol(m) ),
-      brick_names = brick_names)
+      brick_dim = c( brick_nrow, brick_ncol, ncol( m ) ),
+      brick_names = brick_names,
+      brick_na_indices = brick_na_indices )
   } else {
     m <- SAR_matrix(
       m,
-      extent = attr(attr_src, "extent"),
-      crs = attr(attr_src, "crs"),
-      brick_nrow = attr(attr_src, "brick_dim")[1],
-      brick_ncol = attr(attr_src, "brick_dim")[2])
+      extent = attr( attr_src, "extent" ),
+      crs = attr( attr_src, "crs" ),
+      brick_nrow = attr( attr_src, "brick_dim" )[ 1 ],
+      brick_ncol = attr( attr_src, "brick_dim" )[ 2 ],
+      brick_na_indices = attr( attr_src, "brick_na_indices" ))
   }
   return(m)
 }

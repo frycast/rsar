@@ -4,10 +4,18 @@
 \alias{brick_to_matrix}
 \title{brick_to_matrix}
 \usage{
-brick_to_matrix(b)
+brick_to_matrix(b, drop_na = TRUE)
 }
 \arguments{
 \item{b}{A raster \code{\link[raster]{brick}}.}
+
+\item{drop_na}{A logical. If \code{TRUE} then any
+\code{NA} pixels are dropped, but a record is kept of their
+location so that the original raster brick can be easily
+reconstructed later with \code{\link[rsar]{matrix_to_brick}}.
+Note, to save time, only one layer is checked for \code{NA}
+pixels, i.e., it is assumed that an \code{NA} pixel is
+\code{NA} across all layers.}
 }
 \value{
 An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
