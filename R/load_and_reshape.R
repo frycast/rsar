@@ -14,6 +14,13 @@
 #' @param filename This is usually a string giving absolute or relative
 #' path to a \code{tif} file containing a SAR raster brick. This argument is
 #' passed to \code{\link[raster]{brick}}.
+#' @param drop_na A logical. If \code{TRUE} then any
+#' \code{NA} pixels are dropped, but a record is kept of their
+#' location so that the original raster brick can be easily
+#' reconstructed later with \code{\link[rsar]{matrix_to_brick}}.
+#' Note, to save time, only one layer is checked for \code{NA}
+#' pixels, i.e., it is assumed that an \code{NA} pixel is
+#' \code{NA} across all layers.
 #'
 #' @return
 #' An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
@@ -26,8 +33,8 @@
 #'   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 #' load_SAR_matrix(filename)
 #'
-load_SAR_matrix <- function(filename) {
-  return(brick_to_matrix(raster::brick(filename)))
+load_SAR_matrix <- function(filename, drop_na = TRUE) {
+  return(brick_to_matrix( b = raster::brick( filename ), drop_na = drop_na ))
 }
 
 
@@ -43,6 +50,13 @@ load_SAR_matrix <- function(filename) {
 #' original brick.
 #'
 #' @param b A raster \code{\link[raster]{brick}}.
+#' @param drop_na A logical. If \code{TRUE} then any
+#' \code{NA} pixels are dropped, but a record is kept of their
+#' location so that the original raster brick can be easily
+#' reconstructed later with \code{\link[rsar]{matrix_to_brick}}.
+#' Note, to save time, only one layer is checked for \code{NA}
+#' pixels, i.e., it is assumed that an \code{NA} pixel is
+#' \code{NA} across all layers.
 #'
 #' @return
 #' An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
@@ -56,18 +70,27 @@ load_SAR_matrix <- function(filename) {
 #' b <- raster::brick(filename)
 #' m <- brick_to_matrix(b)
 #'
-brick_to_matrix <- function(b) {
-  b_dim <- dim(b)
-  d <- c(b_dim[1L]*b_dim[2L], b_dim[3L])
-  m <- reticulate::array_reshape(raster::as.array(b), dim = d)
+brick_to_matrix <- function(b, drop_na = TRUE) {
+  b_dim <- dim( b )
+  d <- c( b_dim[ 1L ] * b_dim[ 2L ], b_dim[ 3L ] )
+  m <- reticulate::array_reshape( raster::as.array(b), dim = d )
 
-  m <- SAR_matrix(m, extent = raster::extent(b),
-                  crs = raster::crs(b),
-                  brick_nrow = b_dim[1L],
-                  brick_ncol = b_dim[2L],
-                  brick_names = names(b))
+  na_indices <- integer(0)
+  if ( drop_na ) {
+    na_indices <- which( is.na( m[,1] ) )
+    if ( length( na_indices ) > 0 ) m <- m[ -na_indices, ]
+  }
+
+  m <- SAR_matrix(m, extent = raster::extent( b ),
+                  crs = raster::crs( b ),
+                  brick_nrow = b_dim[ 1L ],
+                  brick_ncol = b_dim[ 2L ],
+                  brick_names = names( b ),
+                  brick_na_indices = na_indices )
+
   return(m)
 }
+
 
 
 ##########################
@@ -94,17 +117,25 @@ brick_to_matrix <- function(b) {
 #' m <- load_SAR_matrix(filename)
 #' matrix_to_brick(m)
 #'
-matrix_to_brick <- function(m) {
-  assertthat::assert_that(is_SAR_matrix(m))
+matrix_to_brick <- function( m ) {
+  assertthat::assert_that( is_SAR_matrix( m ) )
 
-  dim <- attr(m, "brick_dim")
-  b <- raster::brick(reticulate::array_reshape(m, dim = dim),
-                     crs = attr(m, "crs"))
-  matrix_to_brick
-  raster::extent(b) <- attr(m, "extent")
-  names(b) <- attr(m, "brick_names")
-  return(b)
+  na_indices <- attr( m, "brick_na_indices" )
+  na_len <- length( na_indices )
+
+  if ( na_len > 0 ) {
+    len <- nrow( m ) + na_len
+    m_new <- matrix( NA, nrow = len, ncol = ncol(m) )
+    m_new[ -na_indices, ] <- m
+  } else {
+    m_new <- m
+  }
+
+  dim <- attr( m, "brick_dim" )
+  b <- raster::brick( reticulate::array_reshape( m_new, dim = dim ),
+                      crs = attr( m, "crs" ) )
+
+  raster::extent( b ) <- attr( m, "extent" )
+  names( b ) <- attr( m, "brick_names" )
+  return( b )
 }
-
-
-

@@ -1,17 +1,24 @@
 filename <- system.file(
   "extdata", "MG_VH_sub_norm_testclip.tif", package="rsar")
 
+vh_m1 <- load_SAR_matrix( filename )
+vh_b1 <- raster::brick( filename )
+vh_m2 <- brick_to_matrix( vh_b1 )
+vh_b2 <- matrix_to_brick( vh_m1 )
+m1 <- SAR_matrix()
 
-testthat::test_that('Tif data loads correctly', {
+
+test_that('Tif data loads correctly', {
 
   x <- load_SAR_matrix(filename)
-  testthat::expect_equal(class(x), c('SAR_matrix', 'matrix'))
-  testthat::expect_equal(typeof(x), 'double')
-  testthat::expect_equal(dim(x), c('2150', '30'))
-  testthat::expect_equal(attributes(x)$brick_dim, c(43, 50, 30))
-  testthat::expect_equal(attributes(x)$crs@projargs, "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-  testthat::expect_equal(round(attributes(x)$extent@ymax, 3), -37.259)
-  testthat::expect_equal(round(attributes(x)$extent@xmax, 3), 140.497)
+  expect_equal(class(x), c('SAR_matrix', 'matrix'))
+  expect_equal(typeof(x), 'double')
+  expect_equal(dim(x), c(2150, 30))
+  expect_equal(attributes(x)$brick_dim, c(43, 50, 30))
+  expect_equal(attributes(x)$crs@projargs,
+     "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+  expect_equal(round(attributes(x)$extent@ymax, 3), -37.259)
+  expect_equal(round(attributes(x)$extent@xmax, 3), 140.497)
 })
 
 
@@ -31,15 +38,15 @@ test_that("data loads and reshapes", {
 
   testthat::expect_equal(attr(vh_m1,"brick_dim"), c(43, 50, 30))
 
-  testthat::expect_gt(dim(vh_m2)[1], 1)
-  testthat::expect_gt(dim(vh_m2)[2], 1)
+  expect_gt(dim(vh_m2)[1], 1)
+  expect_gt(dim(vh_m2)[2], 1)
 
-  testthat::expect_gt(dim(vh_b2)[1], 1)
-  testthat::expect_gt(dim(vh_b2)[2], 1)
-  testthat::expect_gt(dim(vh_b2)[3], 1)
+  expect_gt(dim(vh_b2)[1], 1)
+  expect_gt(dim(vh_b2)[2], 1)
+  expect_gt(dim(vh_b2)[3], 1)
 
-  testthat::expect_gt(dim(m1)[1], 1)
-  testthat::expect_gt(dim(m1)[2], 1)
+  expect_gt(dim(m1)[1], 1)
+  expect_gt(dim(m1)[2], 1)
 })
 
 
@@ -48,8 +55,21 @@ test_that("Time series data is processed correctly", {
   ts1 <-  choose_order(vh_m1)
   ts2 <-  choose_order(vh_m2)
 
-  testthat::expect_condition(TRUE, ts1 >= 1)
-  testthat::expect_condition(TRUE, ts2 >= 1)
+  expect_true(ts1 >= 1)
+  expect_true(ts2 >= 1)
+})
+
+
+test_that("NA values are tracked in reshaping", {
+
+  b <- raster::brick( filename )
+  b[ 2, 2 ] <- NA
+  m <- brick_to_matrix( b )
+  expect_equal( nrow( m ), 2149 )
+  expect_equal( attr( m, "brick_na_indices" ), 52 )
+
+  b <- matrix_to_brick( m )
+  expect_equal( dim( b ), c( 43, 50, 30 ) )
 })
 
 test_that("Fit function is processed correctly", {

@@ -8,7 +8,8 @@ SAR_matrix(m = matrix(0, 4, 3),
   extent = raster::extent(raster::raster()),
   crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
   brick_nrow = 2, brick_ncol = nrow(m)/brick_nrow,
-  brick_names = paste0("layer.", 1:ncol(m)), attr_src)
+  brick_names = paste0("layer.", 1:ncol(m)),
+  brick_na_indices = integer(0), attr_src)
 }
 \arguments{
 \item{m}{A matrix with raster intensities.}
@@ -31,10 +32,16 @@ columns (in pixels) of each band in the brick. Note that
 \item{brick_names}{A vector of length \code{ncol(m)}
 labelling each band in the raster \code{\link[raster]{brick}}.}
 
+\item{brick_na_indices}{Integer vector giving row indices for locations
+where \code{NA} pixels exist in the
+corresponding raster \code{\link[raster]{brick}}.}
+
 \item{attr_src}{Either another \code{SAR_matrix} or a
 raster \code{\link[raster]{brick}}. If this argument is not
 missing then all other arguments to this function will be sourced
-from \code{attr_src}, except for the argument \code{brick_names}.}
+from \code{attr_src} (except for the argument \code{brick_names},
+since \code{attr_src} is understood to possible have fewer
+columns than \code{m}).}
 }
 \value{
 A \code{SAR_matrix} object; a specialisation
