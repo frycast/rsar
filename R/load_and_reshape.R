@@ -80,7 +80,7 @@ load_SAR_matrix <- function(filename, drop_na = TRUE, na_layer = 1L ) {
 brick_to_matrix <- function(b, drop_na = TRUE, na_layer = 1L ) {
   b_dim <- dim( b )
   d <- c( b_dim[ 1L ] * b_dim[ 2L ], b_dim[ 3L ] )
-  m <- reticulate::array_reshape( raster::as.array(b), dim = d )
+  m <- reticulate::array_reshape( raster::as.array( b ), dim = d )
 
   na_indices <- integer(0)
   if ( drop_na ) {
@@ -88,7 +88,7 @@ brick_to_matrix <- function(b, drop_na = TRUE, na_layer = 1L ) {
     if ( length( na_indices ) > 0 ) m <- m[ -na_indices, ]
   }
 
-  m <- SAR_matrix(m, extent = raster::extent( b ),
+  m <- SAR_matrix(as.matrix( m ), extent = raster::extent( b ),
                   crs = raster::crs( b ),
                   brick_nrow = b_dim[ 1L ],
                   brick_ncol = b_dim[ 2L ],
