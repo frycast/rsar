@@ -24,12 +24,19 @@ test_that('Tif data loads correctly', {
 
 test_that("data loads and reshapes", {
 
-  expect_equal(dim(vh_m1), dim(vh_m2))
-  expect_equal(dim(vh_b1), dim(vh_b2))
-  expect_equal(summary(vh_m1)[1], summary(vh_m2)[1])
-  expect_equal(summary(vh_b1)[1], summary(vh_b2)[1])
+  vh_m1 <- load_SAR_matrix(filename)
+  vh_b1 <- raster::brick(filename)
+  vh_m2 <- brick_to_matrix(vh_b1)
+  vh_b2 <- matrix_to_brick(vh_m1)
 
-  expect_equal(attr(vh_m1,"brick_dim"), c(43, 50, 30))
+  m1 <- SAR_matrix()
+
+  testthat::expect_equal(dim(vh_m1), dim(vh_m2))
+  testthat::expect_equal(dim(vh_b1), dim(vh_b2))
+  testthat::expect_equal(summary(vh_m1)[1], summary(vh_m2)[1])
+  testthat::expect_equal(summary(vh_b1)[1], summary(vh_b2)[1])
+
+  testthat::expect_equal(attr(vh_m1,"brick_dim"), c(43, 50, 30))
 
   expect_gt(dim(vh_m2)[1], 1)
   expect_gt(dim(vh_m2)[2], 1)
@@ -45,11 +52,8 @@ test_that("data loads and reshapes", {
 
 test_that("Time series data is processed correctly", {
 
-  ts1 <-  choose_order(vh_m2)
-  ts2 <-  choose_order(vh_m1)
-
-  fit1 <-  fit_AR_to_SAR(vh_m2)
-  fit2 <-  fit_AR_to_SAR(vh_m1)
+  ts1 <-  choose_order(vh_m1)
+  ts2 <-  choose_order(vh_m2)
 
   expect_true(ts1 >= 1)
   expect_true(ts2 >= 1)
@@ -68,4 +72,11 @@ test_that("NA values are tracked in reshaping", {
   expect_equal( dim( b ), c( 43, 50, 30 ) )
 })
 
+test_that("Fit function is processed correctly", {
 
+  fit1 <-  fit_AR_to_SAR(vh_m1)
+  fit2 <-  fit_AR_to_SAR(vh_m2)
+
+  testthat::expect_equal(dim(fit1)[1], dim(vh_m1)[1])
+  testthat::expect_equal(dim(fit2)[1], dim(vh_m2)[1])
+})
