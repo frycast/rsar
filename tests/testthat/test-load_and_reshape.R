@@ -58,7 +58,6 @@ test_that("Time series data is processed correctly", {
 
 test_that("NA values are tracked in reshaping", {
 
-  m <- load_SAR_matrix( filename )
   b <- raster::brick( filename )
   b[ 2, 2 ] <- NA
   m <- brick_to_matrix( b )
