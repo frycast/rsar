@@ -4,7 +4,8 @@
 \alias{brick_to_matrix}
 \title{brick_to_matrix}
 \usage{
-brick_to_matrix(b, drop_na = TRUE, na_layer = 1L)
+brick_to_matrix(b, drop_na = TRUE, na_layer = 1L,
+  set_na_indices = integer(0))
 }
 \arguments{
 \item{b}{A raster \code{\link[raster]{brick}}.}
@@ -20,6 +21,10 @@ pixels, i.e., it is assumed that an \code{NA} pixel is
 \item{na_layer}{An integer specifying the index of the
 layer to check for \code{NA} values if \code{drop_na}
 is \code{TRUE}.}
+
+\item{set_na_indices}{Optional integer vector specifying a
+vector of row indices in the \code{SAR_matrix} that should be
+replaced by \code{NA} pixels.}
 }
 \value{
 An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation

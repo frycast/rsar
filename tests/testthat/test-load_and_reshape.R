@@ -64,11 +64,14 @@ test_that("NA values are tracked in reshaping", {
 
   b <- raster::brick( filename )
   b[ 2, 2 ] <- NA
-  m <- brick_to_matrix( b )
-  expect_equal( nrow( m ), 2149 )
-  expect_equal( attr( m, "brick_na_indices" ), 52 )
+  m1 <- brick_to_matrix( b )
+  m2 <- load_SAR_matrix( filename, set_na_indices = 2 )
+  expect_equal( nrow( m1 ), 2149 )
+  expect_equal( attr( m1, "brick_na_indices" ), 52 )
+  expect_equal( nrow( m2 ), 2149 )
+  expect_equal( attr( m2, "brick_na_indices" ), 2 )
 
-  b <- matrix_to_brick( m )
+  b <- matrix_to_brick( m1 )
   expect_equal( dim( b ), c( 43, 50, 30 ) )
 })
 

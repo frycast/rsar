@@ -4,7 +4,8 @@
 \alias{load_SAR_matrix}
 \title{load_SAR_matrix}
 \usage{
-load_SAR_matrix(filename, drop_na = TRUE, na_layer = 1L)
+load_SAR_matrix(filename, drop_na = TRUE, na_layer = 1L,
+  set_na_indices = integer(0))
 }
 \arguments{
 \item{filename}{This is usually a string giving absolute or relative
@@ -22,6 +23,10 @@ pixels, i.e., it is assumed that an \code{NA} pixel is
 \item{na_layer}{An integer specifying the index of the
 layer to check for \code{NA} values if \code{drop_na}
 is \code{TRUE}.}
+
+\item{set_na_indices}{Optional integer vector specifying a
+vector of row indices in the \code{SAR_matrix} that should be
+replaced by \code{NA} pixels.}
 }
 \value{
 An object of class \code{\link[rsar]{SAR_matrix}}; a specialisation
