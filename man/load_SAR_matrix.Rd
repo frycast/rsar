@@ -38,11 +38,17 @@ in \code{tif} format, convert the raster brick of
 dimensions \code{A x B x C} into a matrix of
 dimensions \code{A*B x C} while keeping
 track of the geospatial and dimension attributes of the
-original \code{\link[raster]{brick}}.
+original \code{\link[raster]{brick}}. This function
+uses \code{\link[reticulate]{array_reshape}} with
+default \code{order = "C"}, meaning
+that elements are read during
+rearrangement in row-major order, so
+that the last index changes the fastest.
 }
 \examples{
 filename <- system.file(
   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 load_SAR_matrix(filename)
+load_SAR_matrix(filename, set_na_indices = c(1,2))
 
 }

@@ -8,7 +8,12 @@
 #' dimensions \code{A x B x C} into a matrix of
 #' dimensions \code{A*B x C} while keeping
 #' track of the geospatial and dimension attributes of the
-#' original \code{\link[raster]{brick}}.
+#' original \code{\link[raster]{brick}}. This function
+#' uses \code{\link[reticulate]{array_reshape}} with
+#' default \code{order = "C"}, meaning
+#' that elements are read during
+#' rearrangement in row-major order, so
+#' that the last index changes the fastest.
 #'
 #' @param filename This is usually a string giving absolute or relative
 #' path to a \code{tif} file containing a SAR raster brick. This argument is

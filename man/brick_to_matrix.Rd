@@ -41,6 +41,7 @@ original brick.
 filename <- system.file(
   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 b <- raster::brick(filename)
-m <- brick_to_matrix(b)
+m1 <- brick_to_matrix(b)
+m2 <- brick_to_matrix( b, set_na_indices = c(1,2) )
 
 }
