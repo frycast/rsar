@@ -5,7 +5,8 @@ vh_m1 <- load_SAR_matrix( filename )
 vh_b1 <- raster::brick( filename )
 vh_m2 <- brick_to_matrix( vh_b1 )
 vh_b2 <- matrix_to_brick( vh_m1 )
-m1 <- SAR_matrix()
+m1 <- SAR_matrix(m = matrix(0, 4, 3),
+           brick_nrow = 4, brick_ncol = 3)
 
 
 test_that('Tif data loads correctly', {
@@ -28,8 +29,6 @@ test_that("data loads and reshapes", {
   vh_b1 <- raster::brick(filename)
   vh_m2 <- brick_to_matrix(vh_b1)
   vh_b2 <- matrix_to_brick(vh_m1)
-
-  m1 <- SAR_matrix()
 
   testthat::expect_equal(dim(vh_m1), dim(vh_m2))
   testthat::expect_equal(dim(vh_b1), dim(vh_b2))

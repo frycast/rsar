@@ -41,12 +41,14 @@
 #' @export
 #'
 #' @examples
-#' SAR_matrix()
+#' SAR_matrix(m = matrix(0, 4, 3),
+#'            brick_nrow = 4, brick_ncol = 3)
+#'
 #'
 SAR_matrix <- function(
-  m = matrix(0, 4, 3), extent = raster::extent( raster::raster() ),
+  m, extent = raster::extent( raster::raster() ),
   crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  brick_nrow = 2, brick_ncol = nrow( m ) / brick_nrow,
+  brick_nrow, brick_ncol,
   brick_names = paste0( "layer.", 1:ncol( m ) ),
   brick_na_indices = integer(0), attr_src) {
 

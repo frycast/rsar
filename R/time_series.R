@@ -16,7 +16,6 @@
 #'
 #' @return
 #' An integer.
-#' B
 #'
 #' @importFrom stats ar
 #'

@@ -4,11 +4,9 @@
 \alias{SAR_matrix}
 \title{SAR_matrix}
 \usage{
-SAR_matrix(m = matrix(0, 4, 3),
-  extent = raster::extent(raster::raster()),
+SAR_matrix(m, extent = raster::extent(raster::raster()),
   crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  brick_nrow = 2, brick_ncol = nrow(m)/brick_nrow,
-  brick_names = paste0("layer.", 1:ncol(m)),
+  brick_nrow, brick_ncol, brick_names = paste0("layer.", 1:ncol(m)),
   brick_na_indices = integer(0), attr_src)
 }
 \arguments{
@@ -55,6 +53,8 @@ a SAR raster brick (i.e., to the depth dimension),
 and each row corresponds to a pixel.
 }
 \examples{
-SAR_matrix()
+SAR_matrix(m = matrix(0, 4, 3),
+           brick_nrow = 4, brick_ncol = 3)
+
 
 }
