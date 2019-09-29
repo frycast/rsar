@@ -66,12 +66,21 @@ SAR_matrix <- function(
       brick_names = brick_names,
       brick_na_indices = brick_na_indices )
   } else {
+
+    if(missing(brick_nrow)) {
+      brick_nrow <- attr( attr_src, "brick_dim" )[ 1 ]
+    }
+
+    if(missing(brick_ncol)) {
+      brick_ncol <- attr( attr_src, "brick_dim" )[ 2 ]
+    }
+
     m <- SAR_matrix(
       m,
       extent = attr( attr_src, "extent" ),
       crs = attr( attr_src, "crs" ),
-      brick_nrow = attr( attr_src, "brick_dim" )[ 1 ],
-      brick_ncol = attr( attr_src, "brick_dim" )[ 2 ],
+      brick_nrow = brick_nrow,
+      brick_ncol = brick_ncol,
       brick_na_indices = attr( attr_src, "brick_na_indices" ))
   }
   return(m)
