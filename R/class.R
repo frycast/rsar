@@ -50,6 +50,7 @@ SAR_matrix <- function(
   brick_names = paste0( "layer.", 1:ncol( m ) ),
   brick_na_indices = integer(0), attr_src) {
 
+  assertthat::assert_that( is.matrix(m) )
   assertthat::assert_that( length( brick_nrow ) == 1 )
   assertthat::assert_that( length( brick_ncol ) == 1 )
   assertthat::assert_that( length( brick_names ) == ncol( m ) )
