@@ -16,8 +16,6 @@
 #' @param brick_nrow A single integer specifying the number of rows
 #' (in pixels) of each band in the brick. Note that
 #' \code{brick_nrow * brick_nrow} must equal \code{nrow(m)}.
-#' The default value of 2 is for demonstration and
-#' is unlikely to be useful.
 #' @param brick_ncol A single integer specifying the number of
 #' columns (in pixels) of each band in the brick. Note that
 #' \code{brick_nrow * brick_nrow} must equal \code{nrow(m)}.
@@ -53,11 +51,12 @@ SAR_matrix <- function(
   brick_na_indices = integer(0), attr_src) {
 
   assertthat::assert_that( is.matrix(m) )
-  assertthat::assert_that( length( brick_nrow ) == 1 )
-  assertthat::assert_that( length( brick_ncol ) == 1 )
   assertthat::assert_that( length( brick_names ) == ncol( m ) )
 
   if ( missing(attr_src) ) {
+    assertthat::assert_that( length( brick_nrow ) == 1 )
+    assertthat::assert_that( length( brick_ncol ) == 1 )
+
     m <- structure(
       m, class = c( "SAR_matrix", class( m ) ),
       extent = extent,
@@ -71,9 +70,13 @@ SAR_matrix <- function(
       brick_nrow <- attr( attr_src, "brick_dim" )[ 1 ]
     }
 
+    assertthat::assert_that( length( brick_nrow ) == 1 )
+
     if(missing(brick_ncol)) {
       brick_ncol <- attr( attr_src, "brick_dim" )[ 2 ]
     }
+
+    assertthat::assert_that( length( brick_ncol ) == 1 )
 
     m <- SAR_matrix(
       m,

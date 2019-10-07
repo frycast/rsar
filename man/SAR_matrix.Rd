@@ -19,9 +19,7 @@ SAR_matrix(m, extent = raster::extent(raster::raster()),
 
 \item{brick_nrow}{A single integer specifying the number of rows
 (in pixels) of each band in the brick. Note that
-\code{brick_nrow * brick_nrow} must equal \code{nrow(m)}.
-The default value of 2 is for demonstration and
-is unlikely to be useful.}
+\code{brick_nrow * brick_nrow} must equal \code{nrow(m)}.}
 
 \item{brick_ncol}{A single integer specifying the number of
 columns (in pixels) of each band in the brick. Note that
