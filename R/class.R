@@ -52,6 +52,8 @@ SAR_matrix <- function(
 
   assertthat::assert_that( is.matrix(m) )
   assertthat::assert_that( length( brick_names ) == ncol( m ) )
+  assertthat::assert_that(
+    (nrow(m) + length(brick_na_indices)) %% brick_nrow*brick_ncol == 0  )
 
   if ( missing(attr_src) ) {
     assertthat::assert_that( length( brick_nrow ) == 1 )
