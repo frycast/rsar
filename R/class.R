@@ -52,12 +52,12 @@ SAR_matrix <- function(
 
   assertthat::assert_that( is.matrix(m) )
   assertthat::assert_that( length( brick_names ) == ncol( m ) )
-  assertthat::assert_that(
-    (nrow(m) + length(brick_na_indices)) %% brick_nrow*brick_ncol == 0  )
 
   if ( missing(attr_src) ) {
     assertthat::assert_that( length( brick_nrow ) == 1 )
     assertthat::assert_that( length( brick_ncol ) == 1 )
+    assertthat::assert_that(
+      (nrow(m) + length(brick_na_indices)) %% brick_nrow*brick_ncol == 0  )
 
     m <- structure(
       m, class = c( "SAR_matrix", class( m ) ),
@@ -79,6 +79,9 @@ SAR_matrix <- function(
     }
 
     assertthat::assert_that( length( brick_ncol ) == 1 )
+
+    assertthat::assert_that(
+      (nrow(m) + length(brick_na_indices)) %% brick_nrow*brick_ncol == 0  )
 
     m <- SAR_matrix(
       m,
