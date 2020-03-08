@@ -7,7 +7,7 @@
 <!-- badges: end -->
 
 
-# Welcome to rsar
+# R package rsar
 
 Installation with devtools:
 ```{r}
