@@ -23,6 +23,8 @@ geospatial and dimension attributes stored in \code{m}.
 filename <- system.file(
   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 m <- load_SAR_matrix(filename)
+head(m)
 matrix_to_brick(m)
+raster::plot(m)
 
 }

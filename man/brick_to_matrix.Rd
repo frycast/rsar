@@ -4,8 +4,7 @@
 \alias{brick_to_matrix}
 \title{brick_to_matrix}
 \usage{
-brick_to_matrix(b, drop_na = TRUE, na_layer = 1L,
-  set_na_indices = integer(0))
+brick_to_matrix(b, drop_na = TRUE, na_layer = 1L, set_na_indices = integer(0))
 }
 \arguments{
 \item{b}{A raster \code{\link[raster]{brick}}.}

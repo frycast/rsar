@@ -4,10 +4,16 @@
 \alias{SAR_matrix}
 \title{SAR_matrix}
 \usage{
-SAR_matrix(m, extent = raster::extent(raster::raster()),
+SAR_matrix(
+  m,
+  extent = raster::extent(raster::raster()),
   crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-  brick_nrow, brick_ncol, brick_names = paste0("layer.", 1:ncol(m)),
-  brick_na_indices = integer(0), attr_src)
+  brick_nrow,
+  brick_ncol,
+  brick_names = paste0("layer.", 1:ncol(m)),
+  brick_na_indices = integer(0),
+  attr_src
+)
 }
 \arguments{
 \item{m}{A matrix with raster intensities.}

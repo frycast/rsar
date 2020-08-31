@@ -4,8 +4,12 @@
 \alias{load_SAR_matrix}
 \title{load_SAR_matrix}
 \usage{
-load_SAR_matrix(filename, drop_na = TRUE, na_layer = 1L,
-  set_na_indices = integer(0))
+load_SAR_matrix(
+  filename,
+  drop_na = TRUE,
+  na_layer = 1L,
+  set_na_indices = integer(0)
+)
 }
 \arguments{
 \item{filename}{This is usually a string giving absolute or relative

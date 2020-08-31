@@ -137,7 +137,9 @@ brick_to_matrix <- function(b, drop_na = TRUE, na_layer = 1L,
 #' filename <- system.file(
 #'   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
 #' m <- load_SAR_matrix(filename)
+#' head(m)
 #' matrix_to_brick(m)
+#' raster::plot(m)
 #'
 matrix_to_brick <- function( m ) {
   assertthat::assert_that( is_SAR_matrix( m ) )
@@ -160,4 +162,100 @@ matrix_to_brick <- function( m ) {
   raster::extent( b ) <- attr( m, "extent" )
   names( b ) <- attr( m, "brick_names" )
   return( b )
+}
+
+
+
+#' patchify_SAR_matrix
+#'
+#' Reduce the resolution of images (columns) in a
+#' \code{\link[rsar]{SAR_matrix}} object \code{m},
+#' by aggregating all values inside \eqn{d \times d} patches
+#' using the aggregation function \code{fun}.
+#'
+#' @param m An \code{SAR_matrix}  object, such as that output
+#' by \code{\link[rsar]{load_SAR_matrix}}.
+#' @param d The dimension of patches.
+#' @param fun The aggregation function. Default is mean.
+#'
+#' @return
+#' A \code{\link[rsar]{SAR_matrix}} of reduced dimension,
+#' with appropriately adjusted raster attributes.
+#'
+#' @export
+#'
+#' @examples
+#' filename <- system.file(
+#'   "extdata", "MG_CC_sub_norm_testclip.tif", package="rsar")
+#' m <- load_SAR_matrix(filename)
+#' dim(m)
+#' mp <- patchify_SAR_matrix(m,4)
+#' head(mp)
+#' dim(mp)
+#' bp <- matrix_to_brick(mp)
+#' raster::plot(bp)
+#'
+patchify_SAR_matrix <- function(m, d, fun = mean) {
+  img_dim <- attr(m, "brick_dim")[1:2]
+
+  attribs <- NULL
+  patch <- function(x, fun) {
+    p <- patchify(x, n = d, m = d, img_dim = img_dim, fun = fun)
+    attribs <<- attributes(p)
+    return(p)
+  }
+  m_fun <- apply(m, MARGIN = 2, FUN = patch, fun = fun)
+  m_patch <- SAR_matrix( m_fun, attr_src = m,
+                         brick_ncol = attribs$padded_brick_ncol,
+                         brick_nrow = attribs$padded_brick_nrow )
+  attr(m_patch, "d1_pad") <- attribs$d1_pad
+  attr(m_patch, "d2_pad") <- attribs$d2_pad
+  return(m_patch)
+}
+
+# Function takes a vector (column of a SAR_matrix) and
+# aggregates within n x m patches (provided that n
+# and m are divisors of img_dim[1] and img_dim[2]
+# respectively). Returns a (shorter) vector of the aggregates.
+# WARNING: Don't remove NA indices before patchify.
+patchify <- function(v, n, m, img_dim, fun = sum) {
+  d1 <- img_dim[1]
+  d2 <- img_dim[2]
+
+  # Padding with zeros if needed
+  nrem <- d1 %% n
+  mrem <- d2 %% m
+  d1_pad <- 0
+  d2_pad <- 0
+  if ( nrem != 0 || mrem != 0  ) {
+    v1m <- matrix(v, nrow = d1, ncol = d2, byrow = T)
+    if ( nrem != 0 ) {
+      v1m <- rbind( v1m, matrix(0, nrow = n - nrem, ncol = d2) )
+      d1_pad <- n - nrem
+      d1 <- d1 + d1_pad
+    }
+    if ( mrem != 0 ) {
+      v1m <- cbind( v1m, matrix(0, nrow = d1, ncol = m - mrem) )
+      d2_pad <- m - mrem
+      d2 <- d2 + d2_pad
+    }
+    v <- as.vector(t(v1m))
+  }
+
+  # All the action happens here
+  a <- reticulate::array_reshape(v, dim = c(m, d2/m, n, d1/n), order = "F")
+  p <- 1
+  patches <- vector(length = (d1*d2)/(n*m), mode = "numeric")
+  for ( k in 1:(dim(a)[4]) ) {
+    for (l in 1:(dim(a)[2]) ) {
+      patches[p] <- fun(a[,l,,k])
+      p <- p + 1
+    }
+  }
+
+  attr(patches, "padded_brick_nrow") <- d1/n
+  attr(patches, "padded_brick_ncol") <- d2/m
+  attr(patches, "d1_pad") <- d1_pad
+  attr(patches, "d2_pad") <- d2_pad
+  return(patches)
 }
