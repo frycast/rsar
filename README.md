@@ -11,11 +11,21 @@
 
 This package is under development, but a working use case is available at [frycast/kmspd](https://github.com/frycast/kmspd).
 
+### Features
+
+Given a raster image or brick (i.e., multiple raster images), in tif format, the `load_SAR_matrix` function can load the brick into R and convert it into a matrix (called a `SAR_matrix`), where each image occupies one column of the matrix, and each row of the matrix represents one pixel in the image(s). The original raster attributes are stored in the `SAR_matrix`, so that conversion back to raster is straight forward (including with spatial geodata extent). Conversion to/from raster brick and `SAR_matrix` are handled by the functions `brick_to_matrix` and `matrix_to_brick`. 
+
+The function `patchify_SAR_matrix` is useful for reducing the resolution of the raster image(s) by aggregating (e.g., via taking the mean) within patches of specified height and width. The output and input format are both `SAR_matrix`, and the raster attributes are adjusted to suit the new resolution.   
+ 
+### Installation
+
 Installation with devtools:
 ```{r}
 devtools::install_github("frycast/rsar")
 library(rsar)
 ```
+
+### Getting started
 
 The load_SAR_matrix will import a raster brick from a `tif` file and
 convert the raster brick to a `SAR_matrix`. Each column of a `SAR_matrix` 
@@ -32,5 +42,14 @@ The sample raster brick consists of a 43x50 raster image with 29 bands.
 ```{r}
 dim(sample)
 ```
+
+See the help files
+```{r}
+?load_SAR_matrix
+?matrix_to_brick
+?brick_to_matrix
+?patchify_SAR_matrix
+```
+
 
 
