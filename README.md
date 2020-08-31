@@ -9,6 +9,8 @@
 
 # R package rsar
 
+This package is under development, but a working use case is available at [frycast/kmspd](https://github.com/frycast/kmspd).
+
 Installation with devtools:
 ```{r}
 devtools::install_github("frycast/rsar")
